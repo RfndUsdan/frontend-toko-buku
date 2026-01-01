@@ -8,6 +8,16 @@ const api = axios.create({
     },
 });
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      localStorage.clear(); // Hapus data jika token tidak valid
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);
 // Otomatis tambahkan token jika ada di localStorage
 api.interceptors.request.use((config) => {
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;

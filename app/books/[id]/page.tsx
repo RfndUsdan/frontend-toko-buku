@@ -125,10 +125,9 @@ export default function BookDetailPage() {
             <p className="text-gray-500 text-base italic">Penulis: <span className="text-gray-900 font-semibold not-italic">{book.author}</span></p>
           </div>
 
-          <div className="mb-8 p-6 bg-blue-50/30 rounded-2xl border border-blue-50 inline-block w-full sm:w-fit px-8">
-            <p className="text-sm text-gray-400 line-through mb-1">Rp{(book.price * 1.1).toLocaleString("id-ID")}</p>
-            <h2 className="text-3xl font-black text-gray-900">
-              Rp{Number(book.price).toLocaleString("id-ID")}
+          <div className="mb-4 p-3 rounded-2xl ">
+            <h2 className="text-3xl text-gray-900">
+              Harga : Rp{Number(book.price).toLocaleString("id-ID")}
             </h2>
           </div>
 
