@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import api from "@/lib/axios";
 import { Search, BookOpen, Loader2 } from "lucide-react";
 import BookCard from "@/components/BookCard";
-import Footer from "@/components/Footer";
 
 export default function HomePage() {
   const [books, setBooks] = useState([]);
@@ -114,7 +113,6 @@ export default function HomePage() {
           </div>
         )}
       </main>
-      <Footer />
     </div>
   );
 }

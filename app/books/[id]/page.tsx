@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Footer from "@/components/Footer";
 import api from "@/lib/axios";
 import {
   Heart,
@@ -187,8 +186,6 @@ export default function BookDetailPage() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

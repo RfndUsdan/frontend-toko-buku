@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar"; // Sesuaikan path folder Navbar Anda
-
+import Navbar from "@/components/Navbar"; 
+import Footer from "@/components/Footer";
 // Konfigurasi Poppins
 const poppins = Poppins({
   subsets: ["latin"],
@@ -21,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-sans antialiased bg-gray-50 text-slate-900">
         <Navbar />
         <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );

@@ -10,6 +10,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import Swal from "sweetalert2";
+import Footer from "@/components/Footer";
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<any[]>([]);

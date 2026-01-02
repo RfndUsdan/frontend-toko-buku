@@ -19,8 +19,8 @@ export default function Footer() {
           <div className="footer-col">
             <h3 className="text-[#0084ff] font-semibold mb-5">Menu</h3>
             <ul className="space-y-3 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-[#0084ff] hover:pl-1 transition-all">Home</a></li>
-              <li><a href="#" className="hover:text-[#0084ff] hover:pl-1 transition-all">Prediction</a></li>
+              <li><a href="/" className="hover:text-[#0084ff] hover:pl-1 transition-all">Toko Kami</a></li>
+              <li><a href="/about" className="hover:text-[#0084ff] hover:pl-1 transition-all">Tentang Kami</a></li>
             </ul>
           </div>
 
@@ -28,7 +28,6 @@ export default function Footer() {
           <div className="footer-col">
             <h3 className="text-[#0084ff] font-semibold mb-5">Information</h3>
             <ul className="space-y-3 text-sm text-gray-400">
-              <li><a href="#" className="hover:text-[#0084ff] hover:pl-1 transition-all">About</a></li>
               <li><a href="#" className="hover:text-[#0084ff] hover:pl-1 transition-all">Team</a></li>
               <li><a href="#" className="hover:text-[#0084ff] hover:pl-1 transition-all">Contact</a></li>
             </ul>
