@@ -12,44 +12,62 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await api.post("/login", { email, password });
+const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+
+  try {
+    // 1. Bersihkan storage lama sebelum login baru
+    localStorage.clear(); 
+    sessionStorage.clear();
+
+    // 2. Panggil API Login
+    const response = await api.post("/login", { email, password });
+    
+    // 3. Ambil data dari response (pastikan struktur .data.data sesuai API Laravel Anda)
+    const { token, user } = response.data.data;
+
+    // 4. Simpan ke sessionStorage
+    sessionStorage.setItem("token", token);
+    sessionStorage.setItem("user", JSON.stringify(user));
+
+    // Debugging: Cek apakah data user benar-benar muncul di console browser
+    console.log("Data User dari API:", user);
+
+    // 5. Tampilkan SweetAlert
+    Swal.fire({
+      title: "Login Berhasil!",
+      text: `Selamat datang kembali, ${user.name}!`,
+      icon: "success",
+      confirmButtonColor: "#3eb0db",
+    }).then((result) => {
+      // 6. Logika Redirect setelah klik "OK"
+      console.log("SweetAlert ditutup, mencoba redirect...");
       
-      // Ambil token dan user dari response.data.data sesuai struktur API Anda
-      const { token, user } = response.data.data;
+      // Pastikan role aman dari perbedaan huruf besar/kecil
+      const role = user.role.toLowerCase();
+      
+      if (role === "admin") {
+        console.log("Redirecting ke Admin Dashboard...");
+        window.location.href = "/admin/dashboard";
+      } else {
+        console.log("Redirecting ke Home...");
+        window.location.href = "/";
+      }
+    });
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      Swal.fire({
-        title: "Login Berhasil!",
-        text: `Selamat datang kembali, ${user.name}!`,
-        icon: "success",
-        confirmButtonColor: "#3eb0db",
-      }).then(() => {
-        // Redirection berdasarkan role
-        if (user.role === "admin") {
-          window.location.href = "/admin/dashboard";
-        } else {
-          window.location.href = "/";
-        }
-      });
-    } catch (error: any) {
-      console.error("Error Detail:", error.response?.data);
-      Swal.fire({
-        title: "Login Gagal",
-        text: error.response?.data?.message || "Email atau password salah.",
-        icon: "error",
-        confirmButtonColor: "#ef4444",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  } catch (error: any) {
+    console.error("Error Detail:", error.response?.data);
+    Swal.fire({
+      title: "Login Gagal",
+      text: error.response?.data?.message || "Email atau password salah.",
+      icon: "error",
+      confirmButtonColor: "#ef4444",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="flex min-h-screen w-full flex-col md:flex-row overflow-hidden font-sans">
       

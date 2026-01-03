@@ -52,19 +52,34 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
+  const storedUser = sessionStorage.getItem("user");
+
+  
+  
+  if (storedUser) {
+    try {
+      // 1. Definisikan variabel 'user' dengan mem-parse string dari session
       const user = JSON.parse(storedUser);
-      if (user.role !== "admin") {
+      
+      // 2. Sekarang variabel 'user' sudah ada, baru kita ambil role-nya
+      const role = user.role?.toLowerCase();
+
+      if (role !== "admin") {
+        console.log("Bukan admin, dilempar ke home");
         router.push("/");
       } else {
         setAdminName(user.name);
         fetchDashboardData();
       }
-    } else {
+    } catch (e) {
+      console.error("Gagal parse data user");
       router.push("/login");
     }
-  }, [router]);
+  } else {
+    // Jika tidak ada data di sessionStorage sama sekali
+    router.push("/login");
+  }
+}, [router]);
 
   const chartData = {
     labels: ["Novel", "Sejarah", "Filosofi", "Pendidikan", "Biografi"],

@@ -3,26 +3,24 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import api from "@/lib/axios"; // Pastikan path axios sudah benar
-import { ShoppingCart } from "lucide-react"; // Import icon keranjang
+import api from "@/lib/axios";
+import { ShoppingCart } from "lucide-react";
 
 export default function Navbar() {
   const [user, setUser] = useState<{ role: string; name: string } | null>(null);
   const [mounted, setMounted] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0); // State untuk jumlah barang di keranjang
+  const [cartCount, setCartCount] = useState(0);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
   const pathname = usePathname();
 
-  // 1. Fungsi untuk mengambil jumlah item di keranjang dari API
+  // 1. Ambil jumlah item di keranjang (Gunakan sessionStorage)
   const fetchCartCount = async () => {
-    const storedUser = localStorage.getItem("user");
-    if (!storedUser) return; // Jangan panggil API jika belum login
+    const storedUser = sessionStorage.getItem("user"); // UBAH KE sessionStorage
+    if (!storedUser) return;
 
     try {
       const response = await api.get("/cart");
-      // Mengambil jumlah baris data di keranjang
       setCartCount(response.data.data?.length || 0);
     } catch (e) {
       console.error("Gagal mengambil jumlah keranjang");
@@ -31,17 +29,18 @@ export default function Navbar() {
 
   useEffect(() => {
     setMounted(true);
-    const storedUser = localStorage.getItem("user");
+    
+    // Ambil data user dari sessionStorage
+    const storedUser = sessionStorage.getItem("user"); // UBAH KE sessionStorage
     if (storedUser) {
       try {
         setUser(JSON.parse(storedUser));
-        fetchCartCount(); // Ambil data keranjang saat pertama kali mount
+        fetchCartCount();
       } catch (e) {
         console.error("Gagal parse data user");
       }
     }
 
-    // 2. Event Listener untuk update real-time dari halaman lain
     const handleCartUpdate = () => fetchCartCount();
     window.addEventListener("cart-updated", handleCartUpdate);
 
@@ -56,16 +55,17 @@ export default function Navbar() {
       document.removeEventListener("mousedown", handleClickOutside);
       window.removeEventListener("cart-updated", handleCartUpdate);
     };
-  }, []);
+  }, [pathname]); // Tambahkan pathname agar re-check setiap pindah halaman
 
   const handleLogout = () => {
-    localStorage.clear();
+    sessionStorage.clear(); // UBAH KE sessionStorage
     setUser(null);
     window.location.href = "/login";
   };
 
   if (!mounted) return null;
 
+  
   return (
     <nav className="sticky top-0 z-50 bg-gray-900 border-b border-gray-700">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
