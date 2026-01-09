@@ -14,20 +14,35 @@ interface Book {
   price?: number;
 }
 
+interface Category {
+  id: number | string;
+  name: string;
+  slug: string;
+}
+
 export default function HomePage() {
   const [books, setBooks] = useState<Book[]>([]);
-  const [categories, setCategories] = useState<string[]>(["Semua"]); // Default "Semua"
+  
+  // 2. Ubah tipe data state menjadi array of objects
+  const [categories, setCategories] = useState<Category[]>([
+    { id: "all", name: "Semua", slug: "Semua" }
+  ]);
+  
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("Semua");
 
-  // Menggunakan useCallback agar fungsi tidak dibuat ulang di setiap render
-  // 1. Definisikan fetchCategories sebagai fungsi mandiri (di luar fetchBooks)
   const fetchCategories = useCallback(async () => {
     try {
       const response = await api.get("/categories");
-      const categoryNames = response.data.data.map((c: any) => c.category);
-      setCategories(["Semua", ...categoryNames]);
+      // Ambil data dari API (asumsi response.data.data berisi array object category)
+      const apiCategories = response.data.data; 
+
+      // 3. Gabungkan object "Semua" dengan data dari API
+      setCategories([
+        { id: "all", name: "Semua", slug: "Semua" },
+        ...apiCategories
+      ]);
     } catch (error) {
       console.error("Gagal memuat kategori:", error);
     }
@@ -84,39 +99,39 @@ export default function HomePage() {
       </section>
 
       {/* Toolbar */}
-      <section className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b py-4 shadow-sm">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row gap-4 items-center justify-between">
-          
-          {/* Search Input */}
-          <div className="relative w-full md:w-1/3">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-            <input
-              type="text"
-              placeholder="Cari buku atau penulis..."
-              className="w-full pl-10 pr-4 py-2 bg-gray-100 border border-transparent focus:border-blue-500 focus:bg-white rounded-xl transition-all outline-none text-gray-900"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+        <section className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b py-4 shadow-sm">
+          <div className="container mx-auto px-6 flex flex-col md:flex-row gap-4 items-center justify-between">
+            
+            {/* Search Input */}
+            <div className="relative w-full md:w-1/3">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <input
+                type="text"
+                placeholder="Cari buku atau penulis..."
+                className="w-full pl-10 pr-4 py-2 bg-gray-100 border border-transparent focus:border-blue-500 focus:bg-white rounded-xl transition-all outline-none text-gray-900"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
 
-          {/* Dynamic Categories */}
-          <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto no-scrollbar py-1">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setCategory(cat)}
-                className={`px-5 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap border ${
-                  category === cat
-                    ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-200 scale-105"
-                    : "bg-white border-gray-200 text-gray-600 hover:border-blue-400 hover:text-blue-500"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
+            {/* Dynamic Categories */}
+            <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto no-scrollbar py-1">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setCategory(cat.slug)}
+                  className={`px-5 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap border ${
+                    category === cat.slug 
+                      ? "bg-blue-600 text-white border-blue-600" 
+                      : "bg-white text-gray-600 border-gray-200 hover:border-blue-400"
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              ))}
+            </div>
+          </div> {/* <--- TAMBAHKAN PENUTUP DIV INI */}
+        </section>
 
       {/* Katalog Grid */}
 
