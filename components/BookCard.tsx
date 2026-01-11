@@ -86,7 +86,9 @@ export default function BookCard({ book }: any) {
 
       {/* Info Buku */}
       <div className="p-3 flex flex-col flex-grow">
-        <p className="text-sm text-gray-500">{book.category.name}</p>
+        <p className="text-sm text-gray-500">
+          {book.category?.name || "Tanpa Kategori"}
+        </p>
         <h3 className="font-bold text-gray-900 text-sm leading-tight line-clamp-2 mb-1 h-10">
           {book.title}
         </h3>

@@ -117,7 +117,9 @@ export default function BookDetailPage() {
         {/* Sisi Kanan: Detail - Font dinaikkan skalanya */}
         <div className="flex-1 flex flex-col">
           <div className="mb-6">
-            <span className="text-xs font-bold text-blue-600 uppercase tracking-[0.2em]">{book.category}</span>
+            <span className="text-xs font-bold text-blue-600 uppercase tracking-[0.2em]">
+              {book.category?.name || "Tanpa Kategori"}
+            </span>
             <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mt-2 mb-2 leading-tight">
               {book.title}
             </h1>
@@ -169,7 +171,7 @@ export default function BookDetailPage() {
             </div>
             <div>
               <p className="text-gray-400 text-xs font-medium uppercase tracking-wider mb-1">Kategori Buku</p>
-              <p className="text-gray-800">{book.category}</p>
+              <p className="text-gray-800">{book.category?.name || "-"}</p>
             </div>
             <div>
               <p className="text-gray-400 text-xs font-medium uppercase tracking-wider mb-1">Tahun Terbit</p>
